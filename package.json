@@ -1,0 +1,30 @@
+{
+    "name": "billing-test-app",
+    "version": "1.0.0",
+    "description": "Billing test application",
+    "main": "index.js",
+    "scripts": {
+        "start": "node index.js"
+    },
+    "engines": {
+        "node": "8.12.0",
+        "npm": "6.4.1"
+    },
+    "author": "BillingDev",
+    "dependencies": {
+        "add": "^2.0.6",
+        "dotenv": "^8.2.0",
+        "express": "^4.17.1",
+        "knex": "^0.95.11",
+        "pg": "^8.7.1"
+    },
+    "repository": {
+        "type": "git",
+        "url": "git+https://github.com/DunaevViktor/Billing-Heroku-App.git"
+    },
+    "license": "ISC",
+    "bugs": {
+        "url": "https://github.com/DunaevViktor/Billing-Heroku-App/issues"
+    },
+    "homepage": "https://github.com/DunaevViktor/Billing-Heroku-App#readme"
+}
