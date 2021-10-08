@@ -14,8 +14,30 @@ server.get("/api/companies", (req, res) => {
     res.status(200).json(companies);
 });
 
+server.get("/api/companies/:id", (req, res) => {
+    const { id } = req.params;
+    const found = companies.find(company => company.id === id);
+
+    if(found){
+        res.status(200).json(found);
+    } else {
+        res.status(404).json({message: "Company does not exist."});
+    }
+});
+
 server.get("/api/cards", (req, res) => {
     res.status(200).json(cards);
+});
+
+server.get("/api/cards/:id", (req, res) => {
+    const { id } = req.params;
+    const found = cards.find(card => card.id === id);
+
+    if(found){
+        res.status(200).json(found);
+    } else {
+        res.status(404).json({message: "Card does not exist."});
+    }
 });
 
 /* POST */
