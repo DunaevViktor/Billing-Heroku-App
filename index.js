@@ -10,11 +10,8 @@ const payments = [];
 server.use(express.json());
 
 /* GET */
-server.get("/", (req, res) => {
-    res.json({test1: "text1"});
-});
-server.get("/page1", (req, res) => {
-    res.json({test2: "text2"});
+server.get("/api/companies", (req, res) => {
+    res.status(200).json(companies);
 });
 
 /* POST */
