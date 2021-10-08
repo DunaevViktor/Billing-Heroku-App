@@ -3,15 +3,19 @@ const shortid = require('shortid');
 const server = express();
 
 const PORT = 5000;
-const companies = [];
-const cards = [];
-const payments = [];
+let companies = [];
+let cards = [];
+//let payments = [];
 
 server.use(express.json());
 
 /* GET */
 server.get("/api/companies", (req, res) => {
     res.status(200).json(companies);
+});
+
+server.get("/api/cards", (req, res) => {
+    res.status(200).json(cards);
 });
 
 /* POST */
@@ -21,6 +25,39 @@ server.post("/api/companies", (req, res) => {
     companies.push(companyInfo);
 
     res.status(201).json(companyInfo);
+});
+
+server.post("/api/cards", (req, res) => {
+    const cardInfo = req.body;
+    cardInfo.id = shortid.generate();
+    cards.push(cardInfo);
+
+    res.status(201).json(cardInfo);
+});
+
+/* DELETE */
+server.delete("/api/companies/:id", (req, res) => {
+    const { id } = req.params;
+
+    const deleted = companies.find(company => company.id === id);
+    if(deleted){
+        companies = companies.filter(company => company.id !== id);
+        res.status(200).json(deleted);
+    } else {
+        res.status(404).json({message: "No company with this id in database."});
+    }
+});
+
+server.delete("/api/cards/:id", (req, res) => {
+    const { id } = req.params;
+
+    const deleted = cards.find(card => card.id === id);
+    if(deleted){
+        cards = cards.filter(card => card.id !== id);
+        res.status(200).json(deleted);
+    } else {
+        res.status(404).json({message: "No card with this id in database."});
+    }
 });
 
 server.listen(5000, () => {
