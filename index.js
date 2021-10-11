@@ -82,6 +82,60 @@ server.delete("/api/cards/:id", (req, res) => {
     }
 });
 
+/* PUT */
+server.put("/api/companies/:id", (req, res) => {
+    const { id } = req.params;
+    const changes = req.body;
+
+    const index = companies.findIndex(company => company.id === id);
+    if(index !== -1){
+        companies[index] = changes;
+        res.status(200).json(companies[index]);
+    } else {
+        res.status(404).json({message: "Company does not exist."});
+    }
+});
+
+server.put("/api/cards/:id", (req, res) => {
+    const { id } = req.params;
+    const changes = req.body;
+
+    const index = cards.findIndex(card => card.id === id);
+    if(index !== -1){
+        cards[index] = changes;
+        res.status(200).json(cards[index]);
+    } else {
+        res.status(404).json({message: "Card does not exist."});
+    }
+});
+
+/* PATCH */
+server.patch("/api/companies/:id", (req, res) => {
+    const { id } = req.params;
+    let changes = req.body;
+
+    const found = companies.find(company => company.id === id);
+    if(found){
+        Object.assign(found, changes);
+        res.status(200).json(found);
+    } else {
+        res.status(404).json({message: "Company does not exist."});
+    }
+});
+
+server.patch("/api/cards/:id", (req, res) => {
+    const { id } = req.params;
+    let changes = req.body;
+
+    const found = cards.find(card => card.id === id);
+    if(found){
+        Object.assign(found, changes);
+        res.status(200).json(found);
+    } else {
+        res.status(404).json({message: "Card does not exist."});
+    }
+});
+
 server.listen(5000, () => {
     console.log(`Server running on ${PORT}`);
 });
