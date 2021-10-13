@@ -1,5 +1,6 @@
 const express = require('express');
 const shortid = require('shortid');
+const companiesDbHelper = require('./models/dbHelper');
 const server = express();
 
 const PORT = 5000;
@@ -11,7 +12,14 @@ server.use(express.json());
 
 /* GET */
 server.get("/api/companies", (req, res) => {
-    res.status(200).json(companies);
+    //res.status(200).json(companies);
+    companiesDbHelper.find()
+    .then(companies => {
+        res.status(200).json(companies);
+    })
+    .catch(error => {
+        res.status(500).json({message: "Unable to retrive companies."});
+    })
 });
 
 server.get("/api/companies/:id", (req, res) => {
@@ -42,11 +50,18 @@ server.get("/api/cards/:id", (req, res) => {
 
 /* POST */
 server.post("/api/companies", (req, res) => {
-    const companyInfo = req.body;
+    /*const companyInfo = req.body;
     companyInfo.id = shortid.generate();
     companies.push(companyInfo);
 
-    res.status(201).json(companyInfo);
+    res.status(201).json(companyInfo);*/
+    companiesDbHelper.add(req.body)
+    .then(company => {
+        res.status(200).json(company);
+    })
+    .catch(error => {
+        res.status(500).json({message: "Connot add company."});
+    })
 });
 
 server.post("/api/cards", (req, res) => {
