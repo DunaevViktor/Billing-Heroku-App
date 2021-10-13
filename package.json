@@ -19,7 +19,8 @@
         "knex": "^0.95.11",
         "nodemon": "^2.0.13",
         "pg": "^8.7.1",
-        "shortid": "^2.2.16"
+        "shortid": "^2.2.16",
+        "sqlite3": "^5.0.2"
     },
     "repository": {
         "type": "git",
