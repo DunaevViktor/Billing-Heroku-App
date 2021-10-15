@@ -6,7 +6,8 @@ module.exports = {
     add,
     find,
     findById,
-    remove
+    remove,
+    update
 }
 
 async function add(company){
@@ -28,4 +29,13 @@ function remove(id){
     return db('companies')
     .where({ id })
     .del();
+}
+
+function update(id, changes){
+    return db('companies')
+    .where({ id })
+    .update(changes)
+    .then(() => {
+        return findById(id);
+    });
 }

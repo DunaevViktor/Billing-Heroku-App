@@ -160,27 +160,35 @@ server.patch("/api/companies/:id", (req, res) => {
     const { id } = req.params;
     let changes = req.body;
 
-    const found = companies.find(company => company.id === id);
-    if(found){
-        Object.assign(found, changes);
-        res.status(200).json(found);
-    } else {
-        res.status(404).json({message: "Company does not exist."});
-    }
+    companiesDbHelper.update(id, changes)
+    .then(company => {
+        if(company){
+            res.status(200).json(company);
+        } else {
+            res.status(404).json({message: "Company does not exist."});
+        }
+    })
+    .catch(error => {
+        res.status(500).json({message: "Error updating record."});
+    })
 });
 
-server.patch("/api/cards/:id", (req, res) => {
+/*server.patch("/api/cards/:id", (req, res) => {
     const { id } = req.params;
     let changes = req.body;
 
-    const found = cards.find(card => card.id === id);
-    if(found){
-        Object.assign(found, changes);
-        res.status(200).json(found);
-    } else {
-        res.status(404).json({message: "Card does not exist."});
-    }
-});
+    companiesDbHelper.update(id, changes)
+    .then(card => {
+        if(card){
+            res.status(200).json(card);
+        } else {
+            res.status(404).json({message: "Card does not exist."});
+        }
+    })
+    .catch(error => {
+        res.status(500).json({message: "Error updating record."});
+    })
+});*/
 
 server.listen(PORT, () => {
     console.log(`Server running on ${PORT}`);
