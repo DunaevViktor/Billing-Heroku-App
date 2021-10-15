@@ -3,12 +3,25 @@ const shortid = require('shortid');
 const companiesDbHelper = require('./models/dbHelper');
 const server = express();
 
-const PORT = 5000;
+const PORT = process.env.PORT || 5000;
 let companies = [];
 let cards = [];
 //let payments = [];
 
 server.use(express.json());
+
+/* Heroku app return */
+server.get("/", (req, res) => {
+    res.end(`
+        <h1 align="center"> Heroku app return </h1>
+        <div align="center">
+            <nav>
+                <a href="/">Return Home</a>
+            </nav>
+        </div>
+        
+    `);
+});
 
 /* GET */
 server.get("/api/companies", (req, res) => {
@@ -151,6 +164,6 @@ server.patch("/api/cards/:id", (req, res) => {
     }
 });
 
-server.listen(5000, () => {
+server.listen(PORT, () => {
     console.log(`Server running on ${PORT}`);
 });
