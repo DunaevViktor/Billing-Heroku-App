@@ -1,5 +1,4 @@
 const express = require('express');
-const shortid = require('shortid');
 const companiesDbHelper = require('./models/dbHelper');
 const server = express();
 
@@ -19,13 +18,11 @@ server.get("/", (req, res) => {
                 <a href="/">Return Home</a>
             </nav>
         </div>
-        
     `);
 });
 
 /* GET */
 server.get("/api/companies", (req, res) => {
-    //res.status(200).json(companies);
     companiesDbHelper.find()
     .then(companies => {
         res.status(200).json(companies);
@@ -37,37 +34,48 @@ server.get("/api/companies", (req, res) => {
 
 server.get("/api/companies/:id", (req, res) => {
     const { id } = req.params;
-    const found = companies.find(company => company.id === id);
 
-    if(found){
-        res.status(200).json(found);
-    } else {
-        res.status(404).json({message: "Company does not exist."});
-    }
+    companiesDbHelper.findById(id)
+    .then(company => {
+        if(company){
+            res.status(200).json(company);
+        } else {
+            res.status(404).json({message: "Company does not exist."});
+        }
+    })
+    .catch(error => {
+        res.status(500).json({message: "Unable to perform operation."});
+    })
 });
 
-server.get("/api/cards", (req, res) => {
-    res.status(200).json(cards);
+/*server.get("/api/cards", (req, res) => {
+    companiesDbHelper.find()
+    .then(cards => {
+        res.status(200).json(cards);
+    })
+    .catch(error => {
+        res.status(500).json({message: "Unable to retrive cards."});
+    })
 });
 
 server.get("/api/cards/:id", (req, res) => {
     const { id } = req.params;
-    const found = cards.find(card => card.id === id);
 
-    if(found){
-        res.status(200).json(found);
-    } else {
-        res.status(404).json({message: "Card does not exist."});
-    }
-});
+    companiesDbHelper.findById(id)
+    .then(card => {
+        if(card){
+            res.status(200).json(card);
+        } else {
+            res.status(404).json({message: "Card does not exist."});
+        }
+    })
+    .catch(error => {
+        res.status(500).json({message: "Unable to perform operation."});
+    })
+});*/
 
 /* POST */
 server.post("/api/companies", (req, res) => {
-    /*const companyInfo = req.body;
-    companyInfo.id = shortid.generate();
-    companies.push(companyInfo);
-
-    res.status(201).json(companyInfo);*/
     companiesDbHelper.add(req.body)
     .then(company => {
         res.status(200).json(company);
@@ -77,38 +85,48 @@ server.post("/api/companies", (req, res) => {
     })
 });
 
-server.post("/api/cards", (req, res) => {
-    const cardInfo = req.body;
-    cardInfo.id = shortid.generate();
-    cards.push(cardInfo);
-
-    res.status(201).json(cardInfo);
-});
+/*server.post("/api/cards", (req, res) => {
+    companiesDbHelper.add(req.body)
+    .then(card => {
+        res.status(200).json(card);
+    })
+    .catch(error => {
+        res.status(500).json({message: "Connot add card."});
+    })
+});*/
 
 /* DELETE */
 server.delete("/api/companies/:id", (req, res) => {
     const { id } = req.params;
 
-    const deleted = companies.find(company => company.id === id);
-    if(deleted){
-        companies = companies.filter(company => company.id !== id);
-        res.status(200).json(deleted);
-    } else {
-        res.status(404).json({message: "No company with this id in database."});
-    }
+    companiesDbHelper.remove(id)
+    .then(count => {
+        if(count > 0){
+            res.status(200).json({message: "Successfully deleted."});
+        } else {
+            res.status(404).json({message: "Unable to locate record."});
+        }
+    })
+    .catch(error => {
+        res.status(500).json({message: "Unable to perform operation."});
+    })
 });
 
-server.delete("/api/cards/:id", (req, res) => {
+/*server.delete("/api/cards/:id", (req, res) => {
     const { id } = req.params;
 
-    const deleted = cards.find(card => card.id === id);
-    if(deleted){
-        cards = cards.filter(card => card.id !== id);
-        res.status(200).json(deleted);
-    } else {
-        res.status(404).json({message: "No card with this id in database."});
-    }
-});
+    companiesDbHelper.remove(id)
+    .then(count => {
+        if(count > 0){
+            res.status(200).json({message: "Successfully deleted."});
+        } else {
+            res.status(404).json({message: "Unable to locate record."});
+        }
+    })
+    .catch(error => {
+        res.status(500).json({message: "Unable to perform operation."});
+    })
+});*/
 
 /* PUT */
 server.put("/api/companies/:id", (req, res) => {
