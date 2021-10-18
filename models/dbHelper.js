@@ -6,8 +6,10 @@ module.exports = {
     add,
     find,
     findById,
+    findCardById,
     remove,
-    update
+    update,
+    addCard
 }
 
 async function add(company){
@@ -38,4 +40,17 @@ function update(id, changes){
     .then(() => {
         return findById(id);
     });
+}
+
+function findCardById(id){
+    return db('cards')
+    .where({ id })
+    .first();
+}
+
+async function addCard(card, Company_Id){
+    const [id] = await db('cards')
+    .where({ Company_Id })
+    .insert(card);
+    return findCardById(id);
 }

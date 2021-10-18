@@ -85,15 +85,38 @@ server.post("/api/companies", (req, res) => {
     })
 });
 
-/*server.post("/api/cards", (req, res) => {
-    companiesDbHelper.add(req.body)
-    .then(card => {
-        res.status(200).json(card);
+server.post("/api/companies/:id/cards", (req, res) => {
+    const { id } = req.params;
+    const msg = req.body;
+
+    if(!msg.Company_Id){
+        msg["Company_Id"] = parseInt(id, 10);
+    }
+
+    companiesDbHelper.findById(id)
+    .then(company => {
+        if(!company){
+            res.status(404).json({message: "Invalid id."});
+        }
+
+        if(!msg.FirstName || !msg.LastName || !msg.CardNumber){
+            res.status(400).json({message: "Must provide required fields."});
+        }
+
+        companiesDbHelper.addCard(msg, id)
+        .then(card => {
+            if(card){
+                res.status(200).json(card);
+            }
+        })
+        .catch(error => {
+            res.status(500).json({message: "Failed to add card."});
+        })
     })
     .catch(error => {
-        res.status(500).json({message: "Connot add card."});
+        res.status(500).json({message: "Error finding company."});
     })
-});*/
+});
 
 /* DELETE */
 server.delete("/api/companies/:id", (req, res) => {
