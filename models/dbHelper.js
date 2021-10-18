@@ -3,43 +3,65 @@ const config = require('../knexfile');
 const db = knex(config.development);
 
 module.exports = {
-    add,
-    find,
-    findById,
+    addCompany,
+    addCard,
+    findAllCompanies,
+    findAllCards,
+    findCompanyById,
     findCardById,
-    remove,
-    update,
-    addCard
+    removeCompany,
+    removeCard,
+    updateCompany,
+    updateCard
 }
 
-async function add(company){
+async function addCompany(company){
     const[id] = await db('companies').insert(company);
     return id;
 }
 
-function find(){
+function findAllCompanies(){
     return db('companies');
 }
 
-function findById(id){
+function findAllCards(){
+    return db('cards');
+}
+
+function findCompanyById(id){
     return db('companies')
     .where({ id })
     .first();
 }
 
-function remove(id){
+function removeCompany(id){
     return db('companies')
     .where({ id })
     .del();
 }
 
-function update(id, changes){
+function removeCard(id){
+    return db('cards')
+    .where({ id })
+    .del();
+}
+
+function updateCompany(id, changes){
     return db('companies')
     .where({ id })
     .update(changes)
     .then(() => {
-        return findById(id);
+        return findCompanyById(id);
     });
+}
+
+function updateCard(id, changes){
+    return db('cards')
+    .where({ id })
+    .update(changes)
+    .then(() => {
+        return findCardById(id);
+    })
 }
 
 function findCardById(id){

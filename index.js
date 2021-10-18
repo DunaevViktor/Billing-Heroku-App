@@ -1,5 +1,5 @@
 const express = require('express');
-const companiesDbHelper = require('./models/dbHelper');
+const dbHelperClass = require('./models/dbHelper');
 const server = express();
 
 const PORT = process.env.PORT || 5000;
@@ -23,7 +23,7 @@ server.get("/", (req, res) => {
 
 /* GET */
 server.get("/api/companies", (req, res) => {
-    companiesDbHelper.find()
+    dbHelperClass.findAllCompanies()
     .then(companies => {
         res.status(200).json(companies);
     })
@@ -35,7 +35,7 @@ server.get("/api/companies", (req, res) => {
 server.get("/api/companies/:id", (req, res) => {
     const { id } = req.params;
 
-    companiesDbHelper.findById(id)
+    dbHelperClass.findCompanyById(id)
     .then(company => {
         if(company){
             res.status(200).json(company);
@@ -48,8 +48,8 @@ server.get("/api/companies/:id", (req, res) => {
     })
 });
 
-/*server.get("/api/cards", (req, res) => {
-    companiesDbHelper.find()
+server.get("/api/cards", (req, res) => {
+    dbHelperClass.findAllCards()
     .then(cards => {
         res.status(200).json(cards);
     })
@@ -61,7 +61,7 @@ server.get("/api/companies/:id", (req, res) => {
 server.get("/api/cards/:id", (req, res) => {
     const { id } = req.params;
 
-    companiesDbHelper.findById(id)
+    dbHelperClass.findCardById(id)
     .then(card => {
         if(card){
             res.status(200).json(card);
@@ -72,11 +72,11 @@ server.get("/api/cards/:id", (req, res) => {
     .catch(error => {
         res.status(500).json({message: "Unable to perform operation."});
     })
-});*/
+});
 
 /* POST */
 server.post("/api/companies", (req, res) => {
-    companiesDbHelper.add(req.body)
+    dbHelperClass.addCompany(req.body)
     .then(company => {
         res.status(200).json(company);
     })
@@ -93,7 +93,7 @@ server.post("/api/companies/:id/cards", (req, res) => {
         msg["Company_Id"] = parseInt(id, 10);
     }
 
-    companiesDbHelper.findById(id)
+    dbHelperClass.findCompanyById(id)
     .then(company => {
         if(!company){
             res.status(404).json({message: "Invalid id."});
@@ -103,7 +103,7 @@ server.post("/api/companies/:id/cards", (req, res) => {
             res.status(400).json({message: "Must provide required fields."});
         }
 
-        companiesDbHelper.addCard(msg, id)
+        dbHelperClass.addCard(msg, id)
         .then(card => {
             if(card){
                 res.status(200).json(card);
@@ -122,7 +122,7 @@ server.post("/api/companies/:id/cards", (req, res) => {
 server.delete("/api/companies/:id", (req, res) => {
     const { id } = req.params;
 
-    companiesDbHelper.remove(id)
+    dbHelperClass.removeCompany(id)
     .then(count => {
         if(count > 0){
             res.status(200).json({message: "Successfully deleted."});
@@ -135,10 +135,10 @@ server.delete("/api/companies/:id", (req, res) => {
     })
 });
 
-/*server.delete("/api/cards/:id", (req, res) => {
+server.delete("/api/cards/:id", (req, res) => {
     const { id } = req.params;
 
-    companiesDbHelper.remove(id)
+    dbHelperClass.removeCard(id)
     .then(count => {
         if(count > 0){
             res.status(200).json({message: "Successfully deleted."});
@@ -149,33 +149,6 @@ server.delete("/api/companies/:id", (req, res) => {
     .catch(error => {
         res.status(500).json({message: "Unable to perform operation."});
     })
-});*/
-
-/* PUT */
-server.put("/api/companies/:id", (req, res) => {
-    const { id } = req.params;
-    const changes = req.body;
-
-    const index = companies.findIndex(company => company.id === id);
-    if(index !== -1){
-        companies[index] = changes;
-        res.status(200).json(companies[index]);
-    } else {
-        res.status(404).json({message: "Company does not exist."});
-    }
-});
-
-server.put("/api/cards/:id", (req, res) => {
-    const { id } = req.params;
-    const changes = req.body;
-
-    const index = cards.findIndex(card => card.id === id);
-    if(index !== -1){
-        cards[index] = changes;
-        res.status(200).json(cards[index]);
-    } else {
-        res.status(404).json({message: "Card does not exist."});
-    }
 });
 
 /* PATCH */
@@ -183,7 +156,7 @@ server.patch("/api/companies/:id", (req, res) => {
     const { id } = req.params;
     let changes = req.body;
 
-    companiesDbHelper.update(id, changes)
+    dbHelperClass.updateCompany(id, changes)
     .then(company => {
         if(company){
             res.status(200).json(company);
@@ -196,11 +169,11 @@ server.patch("/api/companies/:id", (req, res) => {
     })
 });
 
-/*server.patch("/api/cards/:id", (req, res) => {
+server.patch("/api/cards/:id", (req, res) => {
     const { id } = req.params;
     let changes = req.body;
 
-    companiesDbHelper.update(id, changes)
+    dbHelperClass.updateCard(id, changes)
     .then(card => {
         if(card){
             res.status(200).json(card);
@@ -211,7 +184,7 @@ server.patch("/api/companies/:id", (req, res) => {
     .catch(error => {
         res.status(500).json({message: "Error updating record."});
     })
-});*/
+});
 
 server.listen(PORT, () => {
     console.log(`Server running on ${PORT}`);
