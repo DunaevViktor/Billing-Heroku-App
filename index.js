@@ -74,6 +74,18 @@ server.get("/api/cards/:id", (req, res) => {
     })
 });
 
+server.get("/api/companies/:id/cards", (req, res) => {
+    const { id } = req.params;
+
+    dbHelperClass.findCardByCompany(id)
+    .then(cards => {
+        res.status(200).json(cards);
+    })
+    .catch(error => {
+        res.status(500).json({message: "Error retrieving cards."});
+    })
+})
+
 /* POST */
 server.post("/api/companies", (req, res) => {
     dbHelperClass.addCompany(req.body)
@@ -125,7 +137,7 @@ server.delete("/api/companies/:id", (req, res) => {
     dbHelperClass.removeCompany(id)
     .then(count => {
         if(count > 0){
-            res.status(200).json({message: "Successfully deleted."});
+            res.status(200).json({message: `Company with id - ${id} successfully deleted.`});
         } else {
             res.status(404).json({message: "Unable to locate record."});
         }
@@ -141,7 +153,7 @@ server.delete("/api/cards/:id", (req, res) => {
     dbHelperClass.removeCard(id)
     .then(count => {
         if(count > 0){
-            res.status(200).json({message: "Successfully deleted."});
+            res.status(200).json({message: `Card with id - ${id} successfully deleted.`});
         } else {
             res.status(404).json({message: "Unable to locate record."});
         }

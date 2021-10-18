@@ -9,6 +9,7 @@ module.exports = {
     findAllCards,
     findCompanyById,
     findCardById,
+    findCardByCompany,
     removeCompany,
     removeCard,
     updateCompany,
@@ -68,6 +69,20 @@ function findCardById(id){
     return db('cards')
     .where({ id })
     .first();
+}
+
+function findCardByCompany(Company_Id){
+    return db('companies')
+    .join('cards', 'companies.id', 'cards.Company_Id')
+    .select(
+        "companies.id as CompanyId",
+        "companies.Name as CompanyName",
+        "cards.id as CardId",
+        "cards.FirstName",
+        "cards.LastName",
+        "cards.CardNumber"
+    )
+    .where({ Company_Id });
 }
 
 async function addCard(card, Company_Id){
