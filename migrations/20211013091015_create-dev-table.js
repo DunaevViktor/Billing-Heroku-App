@@ -29,7 +29,7 @@ exports.up = function (knex) {
         tbl.timestamps(true, true)
         tbl.integer('Amount')
             .notNullable()
-        tbl.integer('Currency')
+        tbl.text('Currency', 128)
             .notNullable()
         tbl.datetime('Date')
         tbl.text('Type', 128) //switch on picklist type
