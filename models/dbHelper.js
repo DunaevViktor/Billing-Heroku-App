@@ -15,8 +15,7 @@ module.exports = {
 }
 
 async function addCompany(company){
-    const[id] = await db('companies').insert(company);
-    return id;
+    return await db('companies').insert(company, ['id', 'Name']);
 }
 
 function findAllCompanies(){
@@ -84,8 +83,7 @@ function findCardByCompany(Company_Id){
 }
 
 async function addCard(card, Company_Id){
-    const [id] = await db('cards')
+    return await db('cards')
     .where({ Company_Id })
-    .insert(card);
-    return findCardById(id);
+    .insert(card, ['id']);
 }
