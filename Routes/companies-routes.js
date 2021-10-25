@@ -86,6 +86,39 @@ router.post("/:id/cards", (req, res) => {
     })
 });
 
+router.post("/:id/payments", (req, res) => {
+    const { id } = req.params;
+    const msg = req.body;
+
+    if(!msg.Company_Id){
+        msg["Company_Id"] = parseInt(id, 10);
+    }
+
+    dbHelperClass.findCompanyById(id)
+    .then(company => {
+        if(!company){
+            res.status(404).json({message: "Invalid id."});
+        }
+
+        if(!msg.Amount || !msg.Currency || !msg.Type){
+            res.status(400).json({message: "Must provide required fields."});
+        }
+
+        dbHelperClass.addPayment(msg, id)
+        .then(payment => {
+            if(payment){
+                res.status(200).json(payment);
+            }
+        })
+        .catch(error => {
+            res.status(500).json({message: "Failed to add payment."});
+        })
+    })
+    .catch(error => {
+        res.status(500).json({message: "Error finding company."});
+    })
+});
+
 /* DELETE */
 router.delete("/:id", (req, res) => {
     const { id } = req.params;

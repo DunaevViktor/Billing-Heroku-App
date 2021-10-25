@@ -3,10 +3,13 @@ const db = require('../dbConfig');
 module.exports = {
     addCompany,
     addCard,
+    addPayment,
     findAllCompanies,
     findAllCards,
+    findAllPayments,
     findCompanyById,
     findCardById,
+    findPaymentById,
     findCardByCompany,
     removeCompany,
     removeCard,
@@ -24,6 +27,10 @@ function findAllCompanies(){
 
 function findAllCards(){
     return db('cards');
+}
+
+function findAllPayments(){
+    return db('payments');
 }
 
 function findCompanyById(id){
@@ -68,6 +75,12 @@ function findCardById(id){
     .first();
 }
 
+function findPaymentById(id){
+    return db('payments')
+    .where({ id })
+    .first();
+}
+
 function findCardByCompany(Company_Id){
     return db('companies')
     .join('cards', 'companies.id', 'cards.Company_Id')
@@ -86,4 +99,10 @@ async function addCard(card, Company_Id){
     return await db('cards')
     .where({ Company_Id })
     .insert(card, ['id']);
+}
+
+async function addPayment(payment, Company_Id){
+    return await db('payments')
+    .where({ Company_Id })
+    .insert(payment, ['id']);
 }
