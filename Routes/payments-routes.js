@@ -29,3 +29,5 @@ router.get("/:id", (req, res) => {
         res.status(500).json({message: "Unable to perform operation."});
     })
 });
+
+module.exports = router;
