@@ -13,8 +13,10 @@ module.exports = {
     findCardByCompany,
     removeCompany,
     removeCard,
+    removePayment,
     updateCompany,
-    updateCard
+    updateCard,
+    updatePayment
 }
 
 async function addCompany(company){
@@ -51,6 +53,12 @@ function removeCard(id){
     .del();
 }
 
+function removePayment(id){
+    return db('payments')
+    .where({ id })
+    .del();
+}
+
 function updateCompany(id, changes){
     return db('companies')
     .where({ id })
@@ -66,6 +74,15 @@ function updateCard(id, changes){
     .update(changes)
     .then(() => {
         return findCardById(id);
+    })
+}
+
+function updatePayment(id, changes){
+    return db('payments')
+    .where({ id })
+    .update(changes)
+    .then(() => {
+        return findPaymentById(id);
     })
 }
 
