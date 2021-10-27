@@ -42,7 +42,7 @@ router.get("/:id/cards", (req, res) => {
     })
 })
 
-router.get("/:id/cards", (req, res) => {
+router.get("/:id/payments", (req, res) => {
     const { id } = req.params;
 
     dbHelperClass.findPaymentByCompany(id)
