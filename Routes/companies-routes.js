@@ -42,6 +42,18 @@ router.get("/:id/cards", (req, res) => {
     })
 })
 
+router.get("/:id/cards", (req, res) => {
+    const { id } = req.params;
+
+    dbHelperClass.findPaymentByCompany(id)
+    .then(payments => {
+        res.status(200).json(payments);
+    })
+    .catch(error => {
+        res.status(500).json({message: "Error retrieving payments."});
+    })
+})
+
 /* POST */
 router.post("/", (req, res) => {
     dbHelperClass.addCompany(req.body)

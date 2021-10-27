@@ -11,6 +11,7 @@ module.exports = {
     findCardById,
     findPaymentById,
     findCardByCompany,
+    findPaymentByCompany,
     removeCompany,
     removeCard,
     removePayment,
@@ -108,6 +109,21 @@ function findCardByCompany(Company_Id){
         "cards.FirstName",
         "cards.LastName",
         "cards.CardNumber"
+    )
+    .where({ Company_Id });
+}
+
+function findPaymentByCompany(Company_Id){
+    return db('companies')
+    .join('payments', 'companies.id', 'payments.Company_Id')
+    .select(
+        "companies.id as CompanyId",
+        "companies.Name as CompanyName",
+        "payments.id as PaymentId",
+        "payments.Amount",
+        "payments.Currency",
+        "payments.Date",
+        "payments.Type"
     )
     .where({ Company_Id });
 }
