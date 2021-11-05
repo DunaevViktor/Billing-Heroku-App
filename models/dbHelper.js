@@ -135,7 +135,6 @@ async function addCard(card, Company_Id){
 }
 
 async function addPayment(payment, Company_Id){
-    return await db('payments')
-    .where({ Company_Id })
-    .insert(payment, ['id']);
+    await db('payments').where({ Company_Id }).insert(payment, ['id']);
+    return json({message: "Payment(s) successfully added."});
 }

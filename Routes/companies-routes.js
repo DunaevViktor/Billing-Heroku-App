@@ -104,33 +104,35 @@ router.post("/:id/payments", (req, res) => {
     const { id } = req.params;
     const msg = req.body;
 
-    if(!msg.Company_Id){
-        msg["Company_Id"] = parseInt(id, 10);
-    }
-
-    dbHelperClass.findCompanyById(id)
-    .then(company => {
-        if(!company){
-            res.status(404).json({message: "Invalid id."});
+    msg.forEach(element => {
+        if(!element.Company_Id){
+            element["Company_Id"] = parseInt(id, 10);
         }
 
-        if(!msg.Amount || !msg.Currency || !msg.Type){
-            res.status(400).json({message: "Must provide required fields."});
-        }
-
-        dbHelperClass.addPayment(msg, id)
-        .then(payment => {
-            if(payment){
-                res.status(200).json(payment);
+        dbHelperClass.findCompanyById(id)
+        .then(company => {
+            if(!company){
+                res.status(404).json({message: "Invalid id."});
             }
+    
+            if(!element.Amount || !element.Currency || !element.Type){
+                res.status(400).json({message: "Must provide required fields."});
+            }
+    
+            dbHelperClass.addPayment(element, id)
+            .then(payment => {
+                if(payment){
+                    res.status(200).json({message: "Payment(s) successfully added."});
+                }
+            })
+            .catch(error => {
+                res.status(500).json({message: "Failed to add payment."});
+            })
         })
         .catch(error => {
-            res.status(500).json({message: "Failed to add payment."});
+            res.status(500).json({message: "Error finding company."});
         })
-    })
-    .catch(error => {
-        res.status(500).json({message: "Error finding company."});
-    })
+    });
 });
 
 /* DELETE */
