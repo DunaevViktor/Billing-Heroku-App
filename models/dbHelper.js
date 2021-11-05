@@ -1,3 +1,4 @@
+const { json } = require('express');
 const db = require('../dbConfig');
 
 module.exports = {
@@ -130,6 +131,7 @@ function findPaymentByCompany(Company_Id){
 
 async function addCard(card, Company_Id){
     await db('cards').where({ Company_Id }).insert(card, ['id']);
+    return json({message: "Card(s) successfully added."});
 }
 
 async function addPayment(payment, Company_Id){
