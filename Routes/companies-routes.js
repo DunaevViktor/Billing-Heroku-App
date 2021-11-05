@@ -152,6 +152,20 @@ router.delete("/:id", (req, res) => {
     })
 });
 
+router.delete("/", (req, res) => {
+    dbHelperClass.removeAllCompanies()
+    .then(count => {
+        if(count > 0){
+            res.status(200).json({message: "Companies successfully deleted."});
+        } else {
+            res.status(404).json({message: "Unable to locate record."});
+        }
+    })
+    .catch(error => {
+        res.status(500).json({message: "Unable to perform operation."});
+    })
+});
+
 /* PATCH */
 router.patch("/:id", (req, res) => {
     const { id } = req.params;

@@ -14,6 +14,7 @@ module.exports = {
     findCardByCompany,
     findPaymentByCompany,
     removeCompany,
+    removeAllCompanies,
     removeCard,
     removeAllCards,
     removePayment,
@@ -48,6 +49,11 @@ function findCompanyById(id){
 function removeCompany(id){
     return db('companies')
     .where({ id })
+    .del();
+}
+
+function removeAllCompanies(){
+    return db('companies')
     .del();
 }
 
