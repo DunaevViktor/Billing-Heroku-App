@@ -56,6 +56,7 @@ router.get("/:id/payments", (req, res) => {
 
 /* POST */
 router.post("/", (req, res) => {
+    console.log('body - ' + req.body);
     dbHelperClass.addCompany(req.body)
     .then(company => {
         res.status(200).json(company);
