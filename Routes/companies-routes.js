@@ -87,7 +87,7 @@ router.post("/:id/cards", (req, res) => {
             dbHelperClass.addCard(element, id)
             .then(card => {
                 if(card){
-                    res.status(200).json(card);
+                    res.status(200).json({message: "Card(s) successfully added."});
                 }
             })
             .catch(error => {
