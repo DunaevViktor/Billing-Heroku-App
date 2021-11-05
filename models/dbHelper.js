@@ -129,9 +129,7 @@ function findPaymentByCompany(Company_Id){
 }
 
 async function addCard(card, Company_Id){
-    return await db('cards')
-    .where({ Company_Id })
-    .insert(card, ['id']);
+    await db('cards').where({ Company_Id }).insert(card, ['id']);
 }
 
 async function addPayment(payment, Company_Id){
