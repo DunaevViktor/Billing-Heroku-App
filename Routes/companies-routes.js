@@ -69,33 +69,37 @@ router.post("/:id/cards", (req, res) => {
     const { id } = req.params;
     const msg = req.body;
 
-    if(!msg.Company_Id){
-        msg["Company_Id"] = parseInt(id, 10);
-    }
-
-    dbHelperClass.findCompanyById(id)
-    .then(company => {
-        if(!company){
-            res.status(404).json({message: "Invalid id."});
+    msg.forEach(element => {
+        if(!element.Company_Id){
+            element["Company_Id"] = parseInt(id, 10);
         }
 
-        if(!msg.FirstName || !msg.LastName || !msg.CardNumber){
-            res.status(400).json({message: "Must provide required fields."});
-        }
-
-        dbHelperClass.addCard(msg, id)
-        .then(card => {
-            if(card){
-                res.status(200).json(card);
+        dbHelperClass.findCompanyById(id)
+        .then(company => {
+            if(!company){
+                res.status(404).json({message: "Invalid id."});
             }
+    
+            if(!element.FirstName || !element.LastName || !element.CardNumber){
+                res.status(400).json({message: "Must provide required fields."});
+            }
+    
+            dbHelperClass.addCard(element, id)
+            .then(card => {
+                if(card){
+                    res.status(200).json(card);
+                }
+            })
+            .catch(error => {
+                res.status(500).json({message: "Failed to add card."});
+            })
         })
         .catch(error => {
-            res.status(500).json({message: "Failed to add card."});
+            res.status(500).json({message: "Error finding company."});
         })
-    })
-    .catch(error => {
-        res.status(500).json({message: "Error finding company."});
-    })
+        
+    });
+    
 });
 
 router.post("/:id/payments", (req, res) => {
